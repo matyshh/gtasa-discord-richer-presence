@@ -46,6 +46,23 @@ float Game::GetProgress()
 	return *reinterpret_cast<float*>(0xA4A61C);
 }
 
+bool Game::IsInVehicle() {
+	return !!(*reinterpret_cast<int*>(0xBA18FC));
+}
+
+int Game::GetVehicleID()
+{
+	//return *reinterpret_cast<int*>(0xB700F0);
+	try {
+		return *reinterpret_cast<WORD*>(*reinterpret_cast<int*>(0xBA18FC) + 0x22);
+	}
+	catch (...) {
+		return -1;
+	}
+	
+
+}
+
 int Game::GetPassedDays()
 {
 	return *reinterpret_cast<int*>(0xB79038);
@@ -54,6 +71,11 @@ int Game::GetPassedDays()
 int Game::GetCurrentWeapon()
 {
 	return *reinterpret_cast<int*>(0xBAA410);
+}
+
+int Game::GetCurrentRadio()
+{
+	return *reinterpret_cast<BYTE*>(0x8CB7A5);
 }
 
 bool Game::IsPedExists()

@@ -38,13 +38,13 @@ void MainThread()
 		drp.smallImageKey = "samp_icon";
 
 		// Loop
-		while (true)
+		while (1 < 2)
 		{
 			if (pGame->IsPedExists())
 			{
 				details = playerName + " [" + std::to_string(playerId) + "]";
 				largeImageText = "Location: " + pGame->GetCurrentZone();
-				smallImageText = "Playing SA-MP";
+				smallImageText = "Playing SAMP";
 
 				// Sending data
 				drp.largeImageKey = weaponIcons[pGame->GetCurrentWeapon()].c_str();
@@ -62,25 +62,35 @@ void MainThread()
 	else
 	{
 		// Single Player
-		char state[256];
+		//char state[256];
+		std::string state;
 		drp.smallImageKey = "game_icon";
 
 		// Loop
-		while (true)
+		while (1 < 2)
 		{
 			if (pGame->IsPedExists())
 			{
-				details = "Mission: " + pGame->GetCurrentMission();
-				sprintf_s(state, "Progress: %.2f%%", pGame->GetProgress());
+				if (pGame->IsInVehicle()) {
+					if (pGame->GetVehicleID() >= 400 && pGame->GetVehicleID() <= 611) details = "Vehicle: " + vehNames[pGame->GetVehicleID() - 400];
+					else details = "Hm, not sure what that vehicle is!";
+					state = "Radio: " + radioNames[pGame->GetCurrentRadio()];
+				}
+				else {
+					details = "Not in a vehicle!";
+					state = "";
+				}
+												
 				largeImageText = "Location: " + pGame->GetCurrentZone();
 				smallImageText = std::to_string(pGame->GetPassedDays()) + " day(s) passed.";
+				//smallImageText = "Radio: " + std::to_string(pGame->GetCurrentRadio());
 
 				// Sending data
 				drp.largeImageKey = weaponIcons[pGame->GetCurrentWeapon()].c_str();
 				drp.largeImageText = largeImageText.c_str();
 				drp.smallImageText = smallImageText.c_str();
 				drp.details = details.c_str();
-				drp.state = state;
+				drp.state = state.c_str();
 
 				Discord_UpdatePresence(&drp);
 
