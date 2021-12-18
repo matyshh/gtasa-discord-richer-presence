@@ -13,7 +13,7 @@ bool Samp::Init()
 	if (dwSAMP_Addr == NULL) dwSAMP_Addr = (DWORD)GetModuleHandleA("samp.dll");
 	if (dwSAMP_Addr == NULL) return false;
 
-	if (SAMP == nullptr) SAMP = *(stSAMP**)(dwSAMP_Addr + 0x21A0F8);
+	if (SAMP == nullptr) SAMP = *(stSAMP**)(dwSAMP_Addr + 0x215B40);
 	if (SAMP == nullptr) return false;
 
 	if (SAMP->iGameState != 14) return false;
