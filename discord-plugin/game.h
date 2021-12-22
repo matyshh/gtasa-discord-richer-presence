@@ -5,19 +5,23 @@
 
 class Game
 {
-private:
-	bool IsAnyMissionActive();
 public:
+	bool IsAnyMissionActive();
 	std::string GetCurrentMission();
 	std::string GetCurrentZone();
 
 	float GetProgress();
 	int GetPassedDays();
+	std::string GetTime();
 	int GetCurrentRadio();
 	int GetCurrentWeapon();
 	bool IsInVehicle();
 	int GetVehicleID();
 	bool IsPedExists();
+	int GetPlayerMoney();
+	int GetPlayerWantedLevel();
+	float GetPlayerHealth();
+	bool IsInCutscene();
 };
 
 const std::string weaponNames[] =
@@ -376,7 +380,7 @@ const std::string vehNames[] = {
 };
 
 const std::string radioNames[] = {
-	"Nema",
+	"None",
 	"Playback FM",
 	"K Rose",
 	"K-DST",

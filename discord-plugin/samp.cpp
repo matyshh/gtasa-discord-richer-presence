@@ -16,10 +16,16 @@ bool Samp::Init()
 	if (SAMP == nullptr) SAMP = *(stSAMP**)(dwSAMP_Addr + 0x215B40);
 	if (SAMP == nullptr) return false;
 
-	if (SAMP->iGameState != 14) return false;
+	//if (SAMP->iGameState != 14) return false;
 
 	return true;
 }
+
+int Samp::iGS() {
+	return SAMP->iGameState;
+}
+
+
 
 stPlayerPool* Samp::GetPlayerPool()
 {

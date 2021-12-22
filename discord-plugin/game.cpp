@@ -60,12 +60,31 @@ int Game::GetVehicleID()
 		return -1;
 	}
 	
+}
+
+float Game::GetPlayerHealth()
+{
+	//return *reinterpret_cast<int*>(0xB700F0);
+	try {
+		return *reinterpret_cast<float*>(*reinterpret_cast<int*>(0xB6F5F0) + 0x540);
+	}
+	catch (...) {
+		return 0.0;
+	}
 
 }
 
 int Game::GetPassedDays()
 {
 	return *reinterpret_cast<int*>(0xB79038);
+}
+
+std::string Game::GetTime() {
+	BYTE minutes = *reinterpret_cast<BYTE*>(0xB70152);
+	std::string minstr;
+	if (minutes < 10) minstr = "0" + std::to_string(minutes);
+	else minstr = std::to_string(minutes);
+	return std::to_string(*reinterpret_cast<BYTE*>(0xB70153)) + ":" + minstr;
 }
 
 int Game::GetCurrentWeapon()
@@ -81,6 +100,18 @@ int Game::GetCurrentRadio()
 bool Game::IsPedExists()
 {
 	return *reinterpret_cast<int*>(0xB6F5F0);
+}
+
+int Game::GetPlayerMoney() {
+	return *reinterpret_cast<int*>(0xB7CE50);
+}
+
+int Game::GetPlayerWantedLevel() {
+	return *(int*)0xBAA420;
+}
+
+bool Game::IsInCutscene() {
+	return *reinterpret_cast<BYTE*>(0xB6F065);
 }
 
 std::map <std::string, std::string> missionNames =

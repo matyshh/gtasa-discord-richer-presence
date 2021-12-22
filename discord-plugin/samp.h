@@ -57,6 +57,7 @@ public:
 	Samp::Samp();
 
 	bool Init();
+	int iGS();
 
 	stPlayerPool* GetPlayerPool();
 	std::string GetServerIp();

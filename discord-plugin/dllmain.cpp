@@ -1,4 +1,5 @@
 #include "dllmain.h"
+#include <string> 
 
 void MainThread()
 {
@@ -18,22 +19,23 @@ void MainThread()
 	
 	if (GetModuleHandleA("samp.dll"))
 	{
-		pSamp = new Samp();
+		//pSamp = new Samp();
 
 		// SA-MP
-		while (!pSamp->Init())
-			Sleep(350);
+		//while (!pSamp->Init())
+			//Sleep(350);
 
 		// Getting samp values
-		std::string serverIP = pSamp->GetServerIp();
-		std::string serverName = cp1251_to_utf8(pSamp->GetServerName().c_str()); // 
+		//std::string serverName;
+		//std::string serverIP = pSamp->GetServerIp();
+		// 
 
-		// Getting player information
+		/*// Getting player information
 		if (!pSamp->GetPlayerPool())
-			return;
+			/return;
 
 		int playerId = pSamp->GetPlayerPool()->sLocalPlayerID;
-		std::string playerName = cp1251_to_utf8(pSamp->GetPlayerPool()->strLocalPlayerName.c_str()); // 
+		std::string playerName = cp1251_to_utf8(pSamp->GetPlayerPool()->strLocalPlayerName.c_str()); */ 
 
 		drp.smallImageKey = "samp_icon";
 
@@ -42,7 +44,9 @@ void MainThread()
 		{
 			if (pGame->IsPedExists())
 			{
-				details = playerName + " [" + std::to_string(playerId) + "]";
+				//serverName = cp1251_to_utf8(pSamp->GetServerName().c_str());
+				//details = playerName + " [" + std::to_string(playerId) + "]";
+				details = "Playing SAMP";
 				largeImageText = "Location: " + pGame->GetCurrentZone();
 				smallImageText = "Playing SAMP";
 
@@ -50,8 +54,8 @@ void MainThread()
 				drp.largeImageKey = weaponIcons[pGame->GetCurrentWeapon()].c_str();
 				drp.largeImageText = largeImageText.c_str();
 				drp.smallImageText = smallImageText.c_str();
+				//drp.details = details.c_str();*/
 				drp.details = details.c_str();
-				drp.state = serverName.c_str();
 
 				Discord_UpdatePresence(&drp);
 
@@ -71,19 +75,37 @@ void MainThread()
 		{
 			if (pGame->IsPedExists())
 			{
-				if (pGame->IsInVehicle()) {
-					if (pGame->GetVehicleID() >= 400 && pGame->GetVehicleID() <= 611) details = "Vehicle: " + vehNames[pGame->GetVehicleID() - 400];
+				if (pGame->IsInCutscene()) {
+					details = "Mission: " + pGame->GetCurrentMission();
+					state = "Watching cutscene";
+				}
+
+				else if (pGame->IsInVehicle()) {
+					if (pGame->GetVehicleID() >= 400 && pGame->GetVehicleID() <= 611) 
+						 details = "Vehicle: " + vehNames[pGame->GetVehicleID() - 400];
 					else details = "Hm, not sure what that vehicle is!";
 					state = "Radio: " + radioNames[pGame->GetCurrentRadio()];
 				}
+
+				else if (pGame->IsAnyMissionActive()) {
+					details = "Mission: " + pGame->GetCurrentMission();
+					state = "Weapon: " + weaponNames[pGame->GetCurrentWeapon()];
+				}
+
+				else if (pGame->GetPlayerWantedLevel()) {
+					details = "Wanted level: " + std::to_string(pGame->GetPlayerWantedLevel());
+					state = "Weapon: " + weaponNames[pGame->GetCurrentWeapon()];
+				}
+
 				else {
-					details = "Not in a vehicle!";
-					state = "";
+					details = "Money: $" + std::to_string(pGame->GetPlayerMoney());
+					char helt[64];
+					sprintf_s(helt, "Health: %.2f%%", pGame->GetPlayerHealth());
+					state = helt;
 				}
 												
 				largeImageText = "Location: " + pGame->GetCurrentZone();
-				smallImageText = std::to_string(pGame->GetPassedDays()) + " day(s) passed.";
-				//smallImageText = "Radio: " + std::to_string(pGame->GetCurrentRadio());
+				smallImageText = "Ingame time: " + pGame->GetTime();
 
 				// Sending data
 				drp.largeImageKey = weaponIcons[pGame->GetCurrentWeapon()].c_str();
