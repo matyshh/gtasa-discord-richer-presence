@@ -1,5 +1,7 @@
 #include "dllmain.h"
 #include <string> 
+#include <stdlib.h>
+
 
 void MainThread()
 {
@@ -7,11 +9,11 @@ void MainThread()
 		Sleep(350);
 
 	pGame = new Game();
-	std::string details, smallImageText, largeImageText;
+	std::string details, state, smallImageText, largeImageText;
 	// int partySize, partyMax;
 
 	DiscordRichPresence drp;
-
+	
 	drp = { 0 };
 	drp.startTimestamp = time(0);
 
@@ -19,23 +21,12 @@ void MainThread()
 	
 	if (GetModuleHandleA("samp.dll"))
 	{
-		//pSamp = new Samp();
-
-		// SA-MP
-		//while (!pSamp->Init())
-			//Sleep(350);
-
-		// Getting samp values
-		//std::string serverName;
-		//std::string serverIP = pSamp->GetServerIp();
-		// 
-
-		/*// Getting player information
-		if (!pSamp->GetPlayerPool())
-			/return;
-
-		int playerId = pSamp->GetPlayerPool()->sLocalPlayerID;
-		std::string playerName = cp1251_to_utf8(pSamp->GetPlayerPool()->strLocalPlayerName.c_str()); */ 
+		pSamp = new Samp();
+		
+		ServerData srvData;
+		char buffer[500];
+		wcstombs(buffer, GetCommandLine(), 500);
+		while (!pSamp->readServerData(buffer, srvData));
 
 		drp.smallImageKey = "samp_icon";
 
@@ -44,30 +35,31 @@ void MainThread()
 		{
 			if (pGame->IsPedExists())
 			{
-				//serverName = cp1251_to_utf8(pSamp->GetServerName().c_str());
-				//details = playerName + " [" + std::to_string(playerId) + "]";
-				details = "Playing SAMP";
-				largeImageText = "Location: " + pGame->GetCurrentZone();
+
+				details = "SAMP nick: " + srvData.username;
+				state = "SAMP IP: " + srvData.address + ":" + srvData.port;
+				largeImageText = "Last radio: " + radioNames[pGame->GetCurrentRadio()];
 				smallImageText = "Playing SAMP";
 
 				// Sending data
 				drp.largeImageKey = weaponIcons[pGame->GetCurrentWeapon()].c_str();
 				drp.largeImageText = largeImageText.c_str();
 				drp.smallImageText = smallImageText.c_str();
-				//drp.details = details.c_str();*/
 				drp.details = details.c_str();
+				drp.state = state.c_str();
 
 				Discord_UpdatePresence(&drp);
 
 				Sleep(15000);
 			}
 		}
+		
 	}
 	else
 	{
 		// Single Player
 		//char state[256];
-		std::string state;
+		
 		drp.smallImageKey = "game_icon";
 
 		// Loop
@@ -119,6 +111,7 @@ void MainThread()
 				Sleep(15000);
 			}
 		}
+
 	}
 }
 

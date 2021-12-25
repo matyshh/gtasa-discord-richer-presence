@@ -46,6 +46,21 @@ struct stPlayerPool
 	int							iIsListed[1004];
 	DWORD						dwPlayerIP[1004]; // always 0
 };
+
+enum EConnectMode {
+	SAMP_CONNECT_UNKNOWN,
+	SAMP_CONNECT_SERVER,
+	SAMP_CONNECT_DEBUG
+};
+
+struct ServerData {
+	EConnectMode connect = SAMP_CONNECT_UNKNOWN;
+	std::string address;
+	std::string port;
+	std::string username;
+};
+
+
 #pragma pack(pop)
 
 class Samp
@@ -54,6 +69,7 @@ private:
 	uint32_t dwSAMP_Addr;
 	struct stSAMP* SAMP;
 public:
+	ServerData srvData;
 	Samp::Samp();
 
 	bool Init();
@@ -62,6 +78,8 @@ public:
 	stPlayerPool* GetPlayerPool();
 	std::string GetServerIp();
 	std::string GetServerName();
+
+	bool readServerData(const char* cmdline, ServerData& data);
 };
 
 extern Samp* pSamp;
