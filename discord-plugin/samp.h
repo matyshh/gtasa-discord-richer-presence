@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <cstdint>
+#define WIN32_LEAN_AND_MEAN
+#include "query.h"
 #include <windows.h>
 
 #pragma pack(push, 1)
@@ -58,6 +60,7 @@ struct ServerData {
 	std::string address;
 	std::string port;
 	std::string username;
+	Query::Information info;
 };
 
 
@@ -79,7 +82,7 @@ public:
 	std::string GetServerIp();
 	std::string GetServerName();
 
-	bool readServerData(const char* cmdline, ServerData& data);
+	bool readServerData(const char* cmdline);
 };
 
 extern Samp* pSamp;

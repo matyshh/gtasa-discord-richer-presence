@@ -10,7 +10,6 @@ void MainThread()
 
 	pGame = new Game();
 	std::string details, state, smallImageText, largeImageText;
-	// int partySize, partyMax;
 
 	DiscordRichPresence drp;
 	
@@ -22,26 +21,33 @@ void MainThread()
 	if (GetModuleHandleA("samp.dll"))
 	{
 		pSamp = new Samp();
-		
-		ServerData srvData;
+				
 		char buffer[500];
 		wcstombs(buffer, GetCommandLine(), 500);
-		while (!pSamp->readServerData(buffer, srvData));
+		while (!pSamp->readServerData(buffer));
+		
+		Query query(pSamp->srvData.address, std::stoi(pSamp->srvData.port));
 
+		details = "SAMP nick: " + pSamp->srvData.username;
+		smallImageText = "Playing SAMP";
+		std::string fullAddress = "samp://" + pSamp->srvData.address + ':' + pSamp->srvData.port;
 		drp.smallImageKey = "samp_icon";
 
-		// Loop
-		while (1 < 2)
-		{
-			if (pGame->IsPedExists())
-			{
+		while (1 < 2) {
+			if (query.info(pSamp->srvData.info)) {
+				std::string players = std::to_string(pSamp->srvData.info.basic.players) + "/" + std::to_string(pSamp->srvData.info.basic.maxPlayers);
+				state = "Server name: " + pSamp->srvData.info.hostname;
+				largeImageText = "Gamemode: " + pSamp->srvData.info.gamemode + "\nPlayer count: " + players;
 
-				details = "SAMP nick: " + srvData.username;
-				state = "SAMP IP: " + srvData.address + ":" + srvData.port;
-				largeImageText = "Last radio: " + radioNames[pGame->GetCurrentRadio()];
-				smallImageText = "Playing SAMP";
+			}
+			else {
+				largeImageText = "Failed to fetch server data!";
+			}
 
-				// Sending data
+			
+
+
+			if (pGame->IsPedExists()) {
 				drp.largeImageKey = weaponIcons[pGame->GetCurrentWeapon()].c_str();
 				drp.largeImageText = largeImageText.c_str();
 				drp.smallImageText = smallImageText.c_str();
@@ -49,10 +55,11 @@ void MainThread()
 				drp.state = state.c_str();
 
 				Discord_UpdatePresence(&drp);
-
 				Sleep(15000);
+
 			}
 		}
+		
 		
 	}
 	else
