@@ -9,12 +9,15 @@ void MainThread()
 		Sleep(350);
 
 	pGame = new Game();
-	std::string details, state, smallImageText, largeImageText;
+	std::string details, state, smallImageText, largeImageText, largeImageKey;
 
 	DiscordRichPresence drp;
 	
 	drp = { 0 };
 	drp.startTimestamp = time(0);
+	
+	largeImageKey = "icon";
+	drp.largeImageKey = largeImageKey.c_str();
 
 	Discord_Initialize(APPLICATION_ID, 0, 0, 0);
 	
@@ -48,7 +51,6 @@ void MainThread()
 
 
 			if (pGame->IsPedExists()) {
-				drp.largeImageKey = weaponIcons[pGame->GetCurrentWeapon()].c_str();
 				drp.largeImageText = largeImageText.c_str();
 				drp.smallImageText = smallImageText.c_str();
 				drp.details = details.c_str();
@@ -65,7 +67,6 @@ void MainThread()
 	else
 	{
 		// Single Player
-		//char state[256];
 		
 		drp.smallImageKey = "game_icon";
 
@@ -107,7 +108,6 @@ void MainThread()
 				smallImageText = "Ingame time: " + pGame->GetTime();
 
 				// Sending data
-				drp.largeImageKey = weaponIcons[pGame->GetCurrentWeapon()].c_str();
 				drp.largeImageText = largeImageText.c_str();
 				drp.smallImageText = smallImageText.c_str();
 				drp.details = details.c_str();
