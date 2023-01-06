@@ -3,8 +3,7 @@
 #include <map>
 #include <windows.h>
 
-class Game
-{
+class Game {
 public:
 	bool IsAnyMissionActive();
 	std::string GetCurrentMission();
@@ -24,8 +23,7 @@ public:
 	bool IsInCutscene();
 };
 
-const std::string weaponNames[] =
-{
+const std::string weaponNames[] = {
 	{ "Fist" },
 	{ "Brass Knuckles" },
 	{ "Golf Club" },
@@ -76,8 +74,7 @@ const std::string weaponNames[] =
 	{ "Fake Pistol" }
 };
 
-const std::string weaponIcons[] =
-{
+const std::string weaponIcons[] = {
 	{ "fist" },
 	{ "brassknuckleicon" },
 	{ "golfclubicon" },
@@ -396,8 +393,7 @@ const std::string radioNames[] = {
 	"Off"
 };
 
-struct ZoneStruct
-{
+struct ZoneStruct {
 	std::string zone_name;
 	double min_x;
 	double min_y;
@@ -407,8 +403,7 @@ struct ZoneStruct
 	double max_z;
 };
 
-const ZoneStruct zone[] =
-{
+const ZoneStruct zone[] = {
 	{ "Aldea Malvada", -1372.140, 2498.520, 0.000, -1277.590, 2615.350, 200.000 },
 	{ "Angel Pine", -2324.940, -2584.290, -6.1, -1964.220, -2212.110, 200.000 },
 	{ "Arco del Oeste", -901.129, 2221.860, 0.000, -592.090, 2571.970, 200.000 },

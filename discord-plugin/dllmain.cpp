@@ -3,8 +3,7 @@
 #include <stdlib.h>
 
 
-void MainThread()
-{
+void MainThread() {
 	while (*(DWORD*)0xC8D4C0 != 9)
 		Sleep(350);
 
@@ -12,23 +11,22 @@ void MainThread()
 	std::string details, state, smallImageText, largeImageText, largeImageKey;
 
 	DiscordRichPresence drp;
-	
+
 	drp = { 0 };
 	drp.startTimestamp = time(0);
-	
+
 	largeImageKey = "icon";
 	drp.largeImageKey = largeImageKey.c_str();
 
 	Discord_Initialize(APPLICATION_ID, 0, 0, 0);
-	
-	if (GetModuleHandleA("samp.dll"))
-	{
+
+	if (GetModuleHandleA("samp.dll")) {
 		pSamp = new Samp();
-				
+
 		char buffer[500];
 		wcstombs(buffer, GetCommandLine(), 500);
 		while (!pSamp->readServerData(buffer));
-		
+
 		Query query(pSamp->srvData.address, std::stoi(pSamp->srvData.port));
 
 		details = "SAMP nick: " + pSamp->srvData.username;
@@ -47,7 +45,7 @@ void MainThread()
 				largeImageText = "Failed to fetch server data!";
 			}
 
-			
+
 
 
 			if (pGame->IsPedExists()) {
@@ -61,28 +59,25 @@ void MainThread()
 
 			}
 		}
-		
-		
+
+
 	}
-	else
-	{
+	else {
 		// Single Player
-		
+
 		drp.smallImageKey = "game_icon";
 
 		// Loop
-		while (1 < 2)
-		{
-			if (pGame->IsPedExists())
-			{
+		while (1 < 2) {
+			if (pGame->IsPedExists()) {
 				if (pGame->IsInCutscene()) {
 					details = "Mission: " + pGame->GetCurrentMission();
 					state = "Watching cutscene";
 				}
 
 				else if (pGame->IsInVehicle()) {
-					if (pGame->GetVehicleID() >= 400 && pGame->GetVehicleID() <= 611) 
-						 details = "Vehicle: " + vehNames[pGame->GetVehicleID() - 400];
+					if (pGame->GetVehicleID() >= 400 && pGame->GetVehicleID() <= 611)
+						details = "Vehicle: " + vehNames[pGame->GetVehicleID() - 400];
 					else details = "Hm, not sure what that vehicle is!";
 					state = "Radio: " + radioNames[pGame->GetCurrentRadio()];
 				}
@@ -103,7 +98,7 @@ void MainThread()
 					sprintf_s(helt, "Health: %.2f%%", pGame->GetPlayerHealth());
 					state = helt;
 				}
-												
+
 				largeImageText = "Location: " + pGame->GetCurrentZone();
 				smallImageText = "Ingame time: " + pGame->GetTime();
 
@@ -122,12 +117,12 @@ void MainThread()
 	}
 }
 
-std::string cp1251_to_utf8(const char* str)
-{
+std::string cp1251_to_utf8(const char* str) {
 	std::string res;
 	int result_u, result_c;
 	result_u = MultiByteToWideChar(1251, 0, str, -1, 0, 0);
-	if (!result_u) { return 0; }
+	if (!result_u) 
+		return 0;
 	wchar_t* ures = new wchar_t[result_u];
 	if (!MultiByteToWideChar(1251, 0, str, -1, ures, result_u)) {
 		delete[] ures;
@@ -149,15 +144,13 @@ std::string cp1251_to_utf8(const char* str)
 	return res;
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved)
-{
-	if (reason == DLL_PROCESS_ATTACH)
-	{
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved) {
+	if (reason == DLL_PROCESS_ATTACH) {
 		DisableThreadLibraryCalls(hModule);
-        CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), 0, 0, 0);
+		CreateThread(0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), 0, 0, 0);
 	}
 	else if (reason == DLL_PROCESS_DETACH)
-        Discord_Shutdown();
+		Discord_Shutdown();
 
 	return TRUE;
 }

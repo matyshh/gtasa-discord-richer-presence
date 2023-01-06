@@ -3,14 +3,12 @@
 
 Samp* pSamp;
 
-Samp::Samp()
-{
+Samp::Samp() {
 	dwSAMP_Addr = NULL;
 	stSAMP* SAMP = nullptr;
 }
 
-bool Samp::Init()
-{
+bool Samp::Init() {
 	if (dwSAMP_Addr == NULL) dwSAMP_Addr = (DWORD)GetModuleHandleA("samp.dll");
 	if (dwSAMP_Addr == NULL) return false;
 
@@ -26,8 +24,7 @@ int Samp::iGS() {
 	return SAMP->iGameState;
 }
 
-bool Samp::readServerData(const char* cmdline)
-{
+bool Samp::readServerData(const char* cmdline) {
 	auto input = std::unique_ptr<char>(_strdup(cmdline));
 	char* next = nullptr;
 	char* token = strtok_s(input.get(), " ", &next);
@@ -69,17 +66,14 @@ bool Samp::readServerData(const char* cmdline)
 }
 
 
-stPlayerPool* Samp::GetPlayerPool()
-{
+stPlayerPool* Samp::GetPlayerPool() {
 	return SAMP->pPools->pPlayer;
 }
 
-std::string Samp::GetServerIp()
-{
+std::string Samp::GetServerIp() {
 	return SAMP->szIP;
 }
 
-std::string Samp::GetServerName()
-{
+std::string Samp::GetServerName() {
 	return SAMP->szHostname;
 }

@@ -3,15 +3,13 @@
 
 typedef int socklen_t;
 
-bool Query::info(Information& information)
-{
+bool Query::info(Information& information) {
 	char packet[QUERY_BASIC_PACKET_LENGTH];
 	if (send('i', packet) < 0) return false;
 	return recvInfo(information, packet);
 }
 
-int Query::send(const char opcode, char out[QUERY_BASIC_PACKET_LENGTH])
-{
+int Query::send(const char opcode, char out[QUERY_BASIC_PACKET_LENGTH]) {
 	if (sock < 1 || server.sin_port < 1) return -1;
 	if (!assemble(opcode, out)) {
 		return -1;
@@ -20,8 +18,7 @@ int Query::send(const char opcode, char out[QUERY_BASIC_PACKET_LENGTH])
 	return sendto(sock, out, QUERY_BASIC_PACKET_LENGTH, 0, reinterpret_cast<sockaddr*>(&server), sizeof(sockaddr_in));
 }
 
-bool Query::recvInfo(Information& info, char in[QUERY_BASIC_PACKET_LENGTH])
-{
+bool Query::recvInfo(Information& info, char in[QUERY_BASIC_PACKET_LENGTH]) {
 	if (sock < 1) return false;
 
 	char cbuffer[QUERY_INCOMING_BUFFER_SIZE] = { 0 };
@@ -96,8 +93,7 @@ bool Query::recvInfo(Information& info, char in[QUERY_BASIC_PACKET_LENGTH])
 	return false;
 }
 
-bool Query::assemble(const char opcode, char out[QUERY_BASIC_PACKET_LENGTH])
-{
+bool Query::assemble(const char opcode, char out[QUERY_BASIC_PACKET_LENGTH]) {
 	out[0] = 'S';
 	out[1] = 'A';
 	out[2] = 'M';
@@ -116,8 +112,7 @@ bool Query::assemble(const char opcode, char out[QUERY_BASIC_PACKET_LENGTH])
 	return true;
 }
 
-Query::Query(std::string ip, const unsigned short port, long timeout) : server{ 0 }
-{
+Query::Query(std::string ip, const unsigned short port, long timeout) : server{ 0 } {
 	sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (sock < 1) {
 		sock = 0;
@@ -140,8 +135,7 @@ Query::Query(std::string ip, const unsigned short port, long timeout) : server{ 
 	server.sin_addr.s_addr = inet_addr(ip.c_str());
 }
 
-Query::~Query()
-{
+Query::~Query() {
 	if (sock) {
 		closesocket(sock);
 	}

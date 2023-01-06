@@ -2,18 +2,16 @@
 
 Game* pGame;
 
-bool Game::IsAnyMissionActive()
-{
+bool Game::IsAnyMissionActive() {
 	return *reinterpret_cast<int*>(0x96ABA0);
 }
 
-std::string Game::GetCurrentMission()
-{
+std::string Game::GetCurrentMission() {
 	// 0xA7A974 - times
 	// 0x96ABA0 - mission status (on/off)
 	if (!pGame->IsAnyMissionActive())
 		return "None";
-	
+
 	char gxtMissionName[8];
 	memcpy(gxtMissionName, (void*)(0xC1B364), 8);
 
@@ -26,8 +24,7 @@ std::string Game::GetCurrentMission()
 	return missionNames[gxtMissionName];
 }
 
-std::string Game::GetCurrentZone()
-{
+std::string Game::GetCurrentZone() {
 	const float position_x = *reinterpret_cast<float*>(0xB6F2E4), position_y = *reinterpret_cast<float*>(0xB6F2E8), position_z = *reinterpret_cast<float*>(0x8CCC44);
 
 	for (int i = 0; i < sizeof(zone) / sizeof(zone[0]); i++)
@@ -41,8 +38,7 @@ std::string Game::GetCurrentZone()
 	return std::string("San Andreas");
 }
 
-float Game::GetProgress()
-{
+float Game::GetProgress() {
 	return *reinterpret_cast<float*>(0xA4A61C);
 }
 
@@ -50,8 +46,7 @@ bool Game::IsInVehicle() {
 	return !!(*reinterpret_cast<int*>(0xBA18FC));
 }
 
-int Game::GetVehicleID()
-{
+int Game::GetVehicleID() {
 	//return *reinterpret_cast<int*>(0xB700F0);
 	try {
 		return *reinterpret_cast<WORD*>(*reinterpret_cast<int*>(0xBA18FC) + 0x22);
@@ -59,11 +54,10 @@ int Game::GetVehicleID()
 	catch (...) {
 		return -1;
 	}
-	
+
 }
 
-float Game::GetPlayerHealth()
-{
+float Game::GetPlayerHealth() {
 	//return *reinterpret_cast<int*>(0xB700F0);
 	try {
 		return *reinterpret_cast<float*>(*reinterpret_cast<int*>(0xB6F5F0) + 0x540);
@@ -74,8 +68,7 @@ float Game::GetPlayerHealth()
 
 }
 
-int Game::GetPassedDays()
-{
+int Game::GetPassedDays() {
 	return *reinterpret_cast<int*>(0xB79038);
 }
 
@@ -87,18 +80,15 @@ std::string Game::GetTime() {
 	return std::to_string(*reinterpret_cast<BYTE*>(0xB70153)) + ":" + minstr;
 }
 
-int Game::GetCurrentWeapon()
-{
+int Game::GetCurrentWeapon() {
 	return *reinterpret_cast<int*>(0xBAA410);
 }
 
-int Game::GetCurrentRadio()
-{
+int Game::GetCurrentRadio() {
 	return *reinterpret_cast<BYTE*>(0x8CB7A5);
 }
 
-bool Game::IsPedExists()
-{
+bool Game::IsPedExists() {
 	return *reinterpret_cast<int*>(0xB6F5F0);
 }
 
@@ -114,8 +104,7 @@ bool Game::IsInCutscene() {
 	return *reinterpret_cast<BYTE*>(0xB6F065);
 }
 
-std::map <std::string, std::string> missionNames =
-{
+std::map <std::string, std::string> missionNames = {
 	{"AMBULAE", "Paramedic (Sub-Mission)"},
 	{"BCESAR2", "King in Exile"},
 	{"BCESAR4", "Wu Zi Mu"},
