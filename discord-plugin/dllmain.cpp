@@ -30,7 +30,6 @@ void MainThread() {
 		Query query(pSamp->srvData.address, std::stoi(pSamp->srvData.port));
 
 		details = "SAMP nick: " + pSamp->srvData.username;
-		smallImageText = "Playing SAMP";
 		std::string fullAddress = "samp://" + pSamp->srvData.address + ':' + pSamp->srvData.port;
 		drp.smallImageKey = "samp_icon";
 
@@ -38,7 +37,8 @@ void MainThread() {
 			if (query.info(pSamp->srvData.info)) {
 				std::string players = std::to_string(pSamp->srvData.info.basic.players) + "/" + std::to_string(pSamp->srvData.info.basic.maxPlayers);
 				state = "Server name: " + pSamp->srvData.info.hostname;
-				largeImageText = "Gamemode: " + pSamp->srvData.info.gamemode + "\nPlayer count: " + players;
+				largeImageText = "Gamemode: " + pSamp->srvData.info.gamemode;
+				smallImageText = "Player count: " + players;
 
 			}
 			else {
