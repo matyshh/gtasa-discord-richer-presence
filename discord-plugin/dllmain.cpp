@@ -29,26 +29,45 @@ void MainThread() {
 
 		Query query(pSamp->srvData.address, std::stoi(pSamp->srvData.port));
 
-		details = "SAMP nick: " + pSamp->srvData.username;
-		std::string fullAddress = "samp://" + pSamp->srvData.address + ':' + pSamp->srvData.port;
-		drp.smallImageKey = "samp_icon";
-
 		while (1 < 2) {
 			if (query.info(pSamp->srvData.info)) {
 				std::string players = std::to_string(pSamp->srvData.info.basic.players) + "/" + std::to_string(pSamp->srvData.info.basic.maxPlayers);
-				state = "Server name: " + pSamp->srvData.info.hostname;
-				largeImageText = "Gamemode: " + pSamp->srvData.info.gamemode;
-				smallImageText = "Player count: " + players;
+				largeImageText = "Gamemode: " + pSamp->srvData.info.gamemode + " | Players: " + players;
 
 			}
 			else {
 				largeImageText = "Failed to fetch server data!";
 			}
 
-
-
-
 			if (pGame->IsPedExists()) {
+				if (pGame->IsInVehicle()) {
+					details = "SAMP nick: " + pSamp->srvData.username + " | Money: $" + std::to_string(pGame->GetPlayerMoney());
+					
+					if (pGame->GetVehicleID() >= 400 && pGame->GetVehicleID() <= 611) {
+						state = "Vehicle: " + vehNames[pGame->GetVehicleID() - 400] + " | Radio: " + radioNames[pGame->GetCurrentRadio()];
+					} else {
+						state = "Vehicle: Unknown | Radio: " + radioNames[pGame->GetCurrentRadio()];
+					}
+				}
+				else {
+					int currentWeapon = pGame->GetCurrentWeapon();
+					std::string currentWeaponName = "Unknown";
+					
+					if (currentWeapon >= 0 && currentWeapon < 49) {
+						currentWeaponName = weaponNames[currentWeapon];
+					}
+
+					details = "SAMP nick: " + pSamp->srvData.username + " | Money: $" + std::to_string(pGame->GetPlayerMoney());
+					state = "Weapon: " + currentWeaponName + " | Health: " + std::to_string((int)pGame->GetPlayerHealth()) + "%";
+				}
+
+				std::string serverInfo = "Server: " + pSamp->srvData.info.hostname;
+				std::string locationInfo = " | Location: " + pGame->GetCurrentZone();
+				largeImageText = pSamp->srvData.info.gamemode + " | " + serverInfo + locationInfo;
+				
+				drp.smallImageKey = "samp_icon";
+				smallImageText = "Players: " + std::to_string(pSamp->srvData.info.basic.players) + "/" + std::to_string(pSamp->srvData.info.basic.maxPlayers) + " | Time: " + pGame->GetTime();
+
 				drp.largeImageText = largeImageText.c_str();
 				drp.smallImageText = smallImageText.c_str();
 				drp.details = details.c_str();
