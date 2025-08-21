@@ -58,7 +58,15 @@ void MainThread() {
 					}
 
 					details = "SAMP nick: " + pSamp->srvData.username + " | Money: $" + std::to_string(pGame->GetPlayerMoney());
-					state = "Weapon: " + currentWeaponName + " | Health: " + std::to_string((int)pGame->GetPlayerHealth()) + "%";
+					char samp_status[128];
+					float armor = pGame->GetPlayerArmor();
+					if (armor > 0.0) {
+						sprintf_s(samp_status, "Weapon: %s | Health: %.0f%% | Armor: %.0f%%", currentWeaponName.c_str(), pGame->GetPlayerHealth(), armor);
+					}
+					else {
+						sprintf_s(samp_status, "Weapon: %s | Health: %.0f%%", currentWeaponName.c_str(), pGame->GetPlayerHealth());
+					}
+					state = samp_status;
 				}
 
 				std::string serverInfo = "Server: " + pSamp->srvData.info.hostname;
@@ -113,9 +121,15 @@ void MainThread() {
 
 				else {
 					details = "Money: $" + std::to_string(pGame->GetPlayerMoney());
-					char helt[64];
-					sprintf_s(helt, "Health: %.2f%%", pGame->GetPlayerHealth());
-					state = helt;
+					char sp_status[128];
+					float armor = pGame->GetPlayerArmor();
+					if (armor > 0.0) {
+						sprintf_s(sp_status, "Health: %.0f%% | Armor: %.0f%%", pGame->GetPlayerHealth(), armor);
+					}
+					else {
+						sprintf_s(sp_status, "Health: %.0f%%", pGame->GetPlayerHealth());
+					}
+					state = sp_status;
 				}
 
 				largeImageText = "Location: " + pGame->GetCurrentZone();

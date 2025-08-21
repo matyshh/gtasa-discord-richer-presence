@@ -20,6 +20,7 @@ public:
 	int GetPlayerMoney();
 	int GetPlayerWantedLevel();
 	float GetPlayerHealth();
+	float GetPlayerArmor();
 	bool IsInCutscene();
 };
 

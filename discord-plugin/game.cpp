@@ -58,14 +58,21 @@ int Game::GetVehicleID() {
 }
 
 float Game::GetPlayerHealth() {
-	//return *reinterpret_cast<int*>(0xB700F0);
 	try {
 		return *reinterpret_cast<float*>(*reinterpret_cast<int*>(0xB6F5F0) + 0x540);
 	}
 	catch (...) {
 		return 0.0;
 	}
+}
 
+float Game::GetPlayerArmor() {
+	try {
+		return *reinterpret_cast<float*>(*reinterpret_cast<int*>(0xB6F5F0) + 0x548);
+	}
+	catch (...) {
+		return 0.0;
+	}
 }
 
 int Game::GetPassedDays() {
