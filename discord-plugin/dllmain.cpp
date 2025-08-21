@@ -114,13 +114,14 @@ void MainThread() {
 					state = "Weapon: " + weaponNames[pGame->GetCurrentWeapon()];
 				}
 
-				else if (pGame->GetPlayerWantedLevel()) {
-					details = "Wanted level: " + std::to_string(pGame->GetPlayerWantedLevel());
-					state = "Weapon: " + weaponNames[pGame->GetCurrentWeapon()];
-				}
-
 				else {
 					details = "Money: $" + std::to_string(pGame->GetPlayerMoney());
+
+					int wantedLevel = pGame->GetPlayerWantedLevel();
+					if (wantedLevel > 0) {
+						details += " | Wanted Level: " + std::to_string(wantedLevel);
+					}
+
 					char sp_status[128];
 					float armor = pGame->GetPlayerArmor();
 					if (armor > 0.0) {
@@ -129,7 +130,7 @@ void MainThread() {
 					else {
 						sprintf_s(sp_status, "Health: %.0f%%", pGame->GetPlayerHealth());
 					}
-					state = sp_status;
+					state = "Weapon: " + weaponNames[pGame->GetCurrentWeapon()] + " | " + sp_status;
 				}
 
 				largeImageText = "Location: " + pGame->GetCurrentZone();
